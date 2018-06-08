@@ -93,3 +93,19 @@ void	Pthread_cond_timedwait(pthread_cond_t *, pthread_mutex_t *,
 void	Pthread_key_create(pthread_key_t *, void (*)(void *));
 void	Pthread_setspecific(pthread_key_t, const void *);
 void	Pthread_once(pthread_once_t *, void (*)(void));
+
+
+const char		*Inet_ntop(int, const void *, char *, size_t);
+void			 Inet_pton(int, const char *, void *);
+
+			/* prototypes for our stdio wrapper functions: see {Sec errors} */
+void	 Fclose(FILE *);
+FILE	*Fdopen(int, const char *);
+char	*Fgets(char *, int, FILE *);
+FILE	*Fopen(const char *, const char *);
+void	 Fputs(const char *, FILE *);
+
+void	 str_echo(int);
+void	 str_cli(FILE *, int);
+int		 tcp_connect(const char *, const char *);
+int		 tcp_listen(const char *, const char *, socklen_t *);
