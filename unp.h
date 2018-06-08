@@ -22,6 +22,8 @@
 #include	<stdarg.h>		/* ANSI C header file */
 #include	<syslog.h>		/* for syslog() */
 
+#define THEAD_READ 1
+
 #define	MAXLINE		4096	/* max text line length */
 #define	SA	struct sockaddr
 #define	SERV_PORT		 9877
@@ -68,7 +70,7 @@ void	 err_sys(const char *, ...);
 
 static void	err_doit(int, int, const char *, va_list);
 
-
+void	*Calloc(size_t, size_t);
 void	*Malloc(size_t);
 
 
