@@ -1,0 +1,86 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Accept	libwrap.c	/^Accept(int fd, struct sockaddr *sa, socklen_t *salenptr)$/;"	f
+Bind	libwrap.c	/^void Bind(int fd, const struct sockaddr *sa, socklen_t salen)$/;"	f
+Calloc	libwrap.c	/^Calloc(size_t n, size_t size)$/;"	f
+Close	libwrap.c	/^Close(int fd)$/;"	f
+Connect	libwrap.c	/^Connect(int fd, const struct sockaddr *sa, socklen_t salen)$/;"	f
+Fclose	libwrap.c	/^Fclose(FILE *fp)$/;"	f
+Fdopen	libwrap.c	/^Fdopen(int fd, const char *type)$/;"	f
+Fgets	libwrap.c	/^Fgets(char *ptr, int n, FILE *stream)$/;"	f
+Fopen	libwrap.c	/^Fopen(const char *filename, const char *mode)$/;"	f
+Fputs	libwrap.c	/^Fputs(const char *ptr, FILE *stream)$/;"	f
+Getpeername	libwrap.c	/^Getpeername(int fd, struct sockaddr *sa, socklen_t *salenptr)$/;"	f
+Getsockname	libwrap.c	/^Getsockname(int fd, struct sockaddr *sa, socklen_t *salenptr)$/;"	f
+Getsockopt	libwrap.c	/^Getsockopt(int fd, int level, int optname, void *optval, socklen_t *optlenptr)$/;"	f
+Inet_pton	libwrap.c	/^Inet_pton(int family, const char *strptr, void *addrptr)$/;"	f
+LISTENQ	unp.h	30;"	d
+Listen	libwrap.c	/^Listen(int fd, int backlog)$/;"	f
+MAXLINE	unp.h	27;"	d
+Malloc	libwrap.c	/^Malloc(size_t size)$/;"	f
+Poll	libwrap.c	/^int Poll(struct pollfd *fdarray, unsigned long nfds, int timeout)$/;"	f
+Pthrad_join	libwrap.c	/^void Pthrad_join(pthread_t tid, void **status)$/;"	f
+Pthread_cond_broadcast	libwrap.c	/^Pthread_cond_broadcast(pthread_cond_t *cptr)$/;"	f
+Pthread_cond_signal	libwrap.c	/^Pthread_cond_signal(pthread_cond_t *cptr)$/;"	f
+Pthread_cond_timedwait	libwrap.c	/^Pthread_cond_timedwait(pthread_cond_t *cptr, pthread_mutex_t *mptr,$/;"	f
+Pthread_cond_wait	libwrap.c	/^Pthread_cond_wait(pthread_cond_t *cptr, pthread_mutex_t *mptr)$/;"	f
+Pthread_create	libwrap.c	/^Pthread_create(pthread_t *tid, const pthread_attr_t *attr,$/;"	f
+Pthread_detach	libwrap.c	/^Pthread_detach(pthread_t tid)$/;"	f
+Pthread_key_create	libwrap.c	/^Pthread_key_create(pthread_key_t *key, void (*func)(void *))$/;"	f
+Pthread_kill	libwrap.c	/^Pthread_kill(pthread_t tid, int signo)$/;"	f
+Pthread_mutex_init	libwrap.c	/^Pthread_mutex_init(pthread_mutex_t *mptr, pthread_mutexattr_t *attr)$/;"	f
+Pthread_mutex_lock	libwrap.c	/^Pthread_mutex_lock(pthread_mutex_t *mptr)$/;"	f
+Pthread_mutex_unlock	libwrap.c	/^Pthread_mutex_unlock(pthread_mutex_t *mptr)$/;"	f
+Pthread_mutexattr_init	libwrap.c	/^Pthread_mutexattr_init(pthread_mutexattr_t *attr)$/;"	f
+Pthread_once	libwrap.c	/^Pthread_once(pthread_once_t *ptr, void (*func)(void))$/;"	f
+Pthread_setspcific	libwrap.c	/^Pthread_setspcific(pthread_key_t key, const void *value)$/;"	f
+Readline	tcpserv01.c	/^Readline(int fd, void *ptr, size_t maxlen)$/;"	f
+Recv	libwrap.c	/^Recv(int fd, void *ptr, size_t nbytes, int flags)$/;"	f
+Recvfrom	libwrap.c	/^Recvfrom(int fd, void *ptr, size_t nbytes, int flags,$/;"	f
+Recvmsg	libwrap.c	/^Recvmsg(int fd, struct msghdr *msg, int flags)$/;"	f
+Rline	tcpserv01.c	/^}Rline;$/;"	t	typeref:struct:__anon1	file:
+SA	unp.h	28;"	d
+SERV_PORT	unp.h	29;"	d
+Select	libwrap.c	/^Select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,$/;"	f
+Send	libwrap.c	/^Send(int fd, const void *ptr, size_t nbytes, int flags)$/;"	f
+Sendmsg	libwrap.c	/^Sendmsg(int fd, const struct msghdr *msg, int flags)$/;"	f
+Sendto	libwrap.c	/^Sendto(int fd, const void *ptr, size_t nbytes, int flags,$/;"	f
+Setsockopt	libwrap.c	/^Setsockopt(int fd, int level, int optname, const void * optval, socklen_t optlen)$/;"	f
+Shutdown	libwrap.c	/^Shutdown(int fd, int how)$/;"	f
+Socket	libwrap.c	/^Socket(int family, int type, int protocol)$/;"	f
+Socketpair	libwrap.c	/^Socketpair(int family, int type, int protocol, int *fd)$/;"	f
+THEAD_READ	unp.h	25;"	d
+Tcp_listen	libwrap.c	/^Tcp_listen(const char * host, const char *serv, socklen_t *addrlenp)$/;"	f
+Writen	libwrap.c	/^Writen(int fd, void *ptr, size_t nbytes)$/;"	f
+doit	tcpserv01.c	/^doit(void *arg)$/;"	f	file:
+err_doit	libwrap.c	/^err_doit(int errnoflag, int level, const char *fmt, va_list ap)$/;"	f	file:
+err_dump	libwrap.c	/^err_dump(const char *fmt, ...)$/;"	f
+err_msg	libwrap.c	/^err_msg(const char *fmt, ...)$/;"	f
+err_quit	libwrap.c	/^err_quit(const char *fmt, ...)$/;"	f
+err_ret	libwrap.c	/^err_ret(const char *fmt, ...)$/;"	f
+err_sys	libwrap.c	/^err_sys(const char *fmt, ...)$/;"	f
+inet_aton	libwrap.c	/^inet_aton(const char *cp, struct in_addr *ap)$/;"	f
+inet_pton	libwrap.c	/^inet_pton(int family, const char *strptr, void *addrptr)$/;"	f
+main	boost01scoped.cpp	/^int main()$/;"	f
+main	tcpcli01.c	/^main(int argc, char **argv)$/;"	f
+main	tcpserv01.c	/^main(int argc, char **argv)$/;"	f
+my_read	tcpserv01.c	/^my_read(Rline *tsd, int fd, char *ptr)$/;"	f	file:
+posix_file	boost01scoped.cpp	/^	posix_file(const char * file_name)$/;"	f	struct:posix_file
+posix_file	boost01scoped.cpp	/^struct posix_file$/;"	s	file:
+readline	tcpserv01.c	/^readline(int fd, void *vptr, size_t maxlen)$/;"	f
+readline_destructor	tcpserv01.c	/^readline_destructor(void *ptr)$/;"	f	file:
+readline_once	tcpserv01.c	/^readline_once(void)$/;"	f	file:
+rl_buf	tcpserv01.c	/^	char rl_buf[MAXLINE];$/;"	m	struct:__anon1	file:
+rl_bufptr	tcpserv01.c	/^	char *rl_bufptr;$/;"	m	struct:__anon1	file:
+rl_cnt	tcpserv01.c	/^	int rl_cnt;$/;"	m	struct:__anon1	file:
+rl_key	tcpserv01.c	/^static pthread_key_t rl_key;$/;"	v	file:
+rl_once	tcpserv01.c	/^static pthread_once_t rl_once = PTHREAD_ONCE_INIT;$/;"	v	file:
+str_cli	tcpcli01.c	/^str_cli(FILE *fp, int sockfd)$/;"	f
+str_echo	libwrap.c	/^str_echo(int sockfd)$/;"	f
+tcp_listen	libwrap.c	/^tcp_listen(const char * host, const char *serv, socklen_t *addrlenp)$/;"	f
+writen	libwrap.c	/^writen(int fd, const void *vptr, size_t n)$/;"	f
+~posix_file	boost01scoped.cpp	/^	~posix_file()$/;"	f	struct:posix_file
