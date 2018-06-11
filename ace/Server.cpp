@@ -83,6 +83,8 @@ public:
 };
 int main(int argc, char* argv[])
 {
+ACE_INET_Addr port_to_listen ("HAStatus");
+
 	ACE_INET_Addr addr(6000);
 	ACE_DEBUG((LM_DEBUG,"Thread: (%t) main"));
 	//Prepare to accept connections
