@@ -2,3 +2,5 @@
 *.o
 *.core
 *.stackdump
+*.out
+a.out
