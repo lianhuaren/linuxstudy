@@ -12,8 +12,6 @@
  //* and set socket options. get the local and remote addresses,
  //* and open and close a socket handle.
  //*
-
-
 class ACE_Export ACE_SOCK
 {
 public:
@@ -26,6 +24,7 @@ public:
 			int option,
 			void *optval,
 			int *optlen) const;
+			
  //* Close the socket.
  //* This method also sets the object's handle value to ACE_INVALID_HANDLE.
  //* 
@@ -45,6 +44,13 @@ public:
 		  //ACE_SOCK_GROUP g,
 		  u_long flags,
 		  int reuse_addr);
+		  
+  /// Get the underlying handle.
+  ACE_HANDLE get_handle (void) const;
+
+  /// Set the underlying handle.
+  void set_handle (ACE_HANDLE handle);
+  
 protected:
 	ACE_SOCK (int type,
 		  int protocol_family,
@@ -69,11 +75,7 @@ ACE_SOCK (void);
  //* pointer/reference.
 ~ACE_SOCK (void);
 
-  /// Get the underlying handle.
-  ACE_HANDLE get_handle (void) const;
 
-  /// Set the underlying handle.
-  void set_handle (ACE_HANDLE handle);
 
 private:
   /// Underlying I/O handle.
@@ -138,6 +140,59 @@ ACE_SOCK::set_handle (ACE_HANDLE handle)
   ACE_TRACE ("ACE_IPC_SAP::set_handle");
   this->handle_ = handle;
 }
+
+ // @class ACE_SOCK_IO
+ 
+ // @brief Defines the methods for the ACE socket wrapper I/O routines
+  // (e.g., send/recv).
+  
+  // if @a timeout == 0, then the call behaves as a normal 
+  // send/recv call, i.e., for blocking sockets, the call will 
+  // block until action is possible; for non-blocking sockets,
+  // -1 will be returned with errno == EWOULDBLOCK if no ation is 
+  // immediately possible.
+  // If @a timeout != 0, the call will wait until the relative time
+  // specified in *@a timeout elapses.
+  // Errors are reported by -1 and 0 return values. If the 
+  // operation times ot, -1 is returned with @c errno == ETIME.
+class ACE_Export ACE_SOCK_IO : public ACE_SOCK
+{
+	
+	
+};
+
+
+ // @class ACE_SOCK_Stream
+ 
+ // @brief Defines the methods in the ACE_SOCK_Stream abstraction.
+ 
+ // This adds additional wrapper methods atop the ACE_SOCK_IO
+ // class.
+class ACE_Export ACE_SOCK_Stream : public ACE_SOCK_IO
+{
+public:
+	
+	 // @name Counted send/receive methods
+	 
+	 // The counted send/receive methods attempt to transfer a specified number
+	 // of bytes even if they must block and retry the operation in order to 
+	 // transfer the entire amount. The time spent blocking for the entire
+	 // transfer can be limited by a specified ACE_Time_Value object which is 
+	 // a relative time (i.e., a fixed amount of time, not an absolute time 
+	 // of day). These methods return the count of transferred bytes, or -1
+	 // if an error occurs or the operation times out before the entire requested 
+	 // amount of data has been transferred.  In error or timeout situations it's 
+	 // possible that some data was transferred before the error 
+	 // or timeout. The @c bytes_transferred parameter is used to obtain the 
+	 // count of bytes transferred before the error or timeout occurred. If the 
+	 // total specified number of bytes is transfered without error, the 
+	 // method return value should equal the value of @c bytes_transferred.
+
+
+
+
+
+};
 
 
 #endif

@@ -55,6 +55,20 @@ typedef int ACE_HANDLE;
 typedef ACE_HANDLE ACE_SOCKET;
 # define ACE_INVALID_HANDLE -1
 
+// #define AF_UNSPEC       0               /* unspecified */
+// #define AF_UNIX         1               /* local to host (pipes, portals) */
+// #define AF_INET         2               /* internetwork: UDP, TCP, etc. */
+
+// #  define PF_UNSPEC 0
+// #  define PF_INET AF_INET
+
+// #  define SOCK_STREAM 1
+
+typedef unsigned long         ACE_UINT32;
+
+#   define ACE_DEFAULT_BACKLOG 5
+
+#  define AF_ANY (-1)
 
 # define ACE_TEXT(STRING) STRING
 
