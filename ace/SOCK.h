@@ -69,7 +69,15 @@ ACE_SOCK (void);
  //* pointer/reference.
 ~ACE_SOCK (void);
 
+  /// Get the underlying handle.
+  ACE_HANDLE get_handle (void) const;
 
+  /// Set the underlying handle.
+  void set_handle (ACE_HANDLE handle);
+
+private:
+  /// Underlying I/O handle.
+  ACE_HANDLE handle_;
 
 };
 
@@ -86,8 +94,14 @@ ACE_SOCK::set_option (int level,
                       int optlen) const
 {
   ACE_TRACE ("ACE_SOCK::set_option");
-  return ACE_OS::setsockopt (this->get_handle (), level,
-                             option, (char *) optval, optlen);
+  // return ACE_OS::setsockopt (this->get_handle (), level,
+                             // option, (char *) optval, optlen);
+							 
+	return ::setsockopt ((ACE_SOCKET) this->get_handle (),
+                              level,
+                              option,
+                              (char *) optval,
+                              optlen);						 
 }
 
 // Provides access to the ACE_OS::getsockopt system call.
@@ -99,8 +113,31 @@ ACE_SOCK::get_option (int level,
                       int *optlen) const
 {
   ACE_TRACE ("ACE_SOCK::get_option");
-  return ACE_OS::getsockopt (this->get_handle (), level,
-                             option, (char *) optval, optlen);
+  // return ACE_OS::getsockopt (this->get_handle (), level,
+                             // option, (char *) optval, optlen);
+	return ::getsockopt ((ACE_SOCKET) this->get_handle (),
+                                     level,
+                                     option,
+                                     optval,
+                                     (ACE_SOCKET_LEN *) optlen);
 }
+
+
+ACE_INLINE ACE_HANDLE
+ACE_SOCK::get_handle (void) const
+{
+  ACE_TRACE ("ACE_IPC_SAP::get_handle");
+  return this->handle_;
+}
+
+// Used to set the underlying handle_.
+
+ACE_INLINE void
+ACE_SOCK::set_handle (ACE_HANDLE handle)
+{
+  ACE_TRACE ("ACE_IPC_SAP::set_handle");
+  this->handle_ = handle;
+}
+
 
 #endif

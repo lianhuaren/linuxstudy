@@ -14,6 +14,10 @@ class MyServiceHandler:
 	// The two thread names are kept here
 	ACE_thread_t thread_names[2];
 public:
+	MyServiceHandler()
+	{
+		printf("111");
+	}
 	int open(void*)
 	{
 		ACE_DEBUG((LM_DEBUG, "Acceptor: received new connection \n"));
