@@ -74,4 +74,33 @@ typedef unsigned long         ACE_UINT32;
 
 #define ACE_ERROR(x)
 
+
+
+// Handle ACE_Svc_Handler
+#   define ACE_PEER_STREAM_1 class _ACE_PEER_STREAM
+#   define ACE_PEER_STREAM_2 _ACE_PEER_STREAM
+#   define ACE_PEER_STREAM _ACE_PEER_STREAM
+#   define ACE_PEER_STREAM_ADDR typename _ACE_PEER_STREAM::PEER_ADDR
+
+// Handle ACE_Acceptor
+#   define ACE_PEER_ACCEPTOR_1 class _ACE_PEER_ACCEPTOR
+#   define ACE_PEER_ACCEPTOR_2 _ACE_PEER_ACCEPTOR
+#   define ACE_PEER_ACCEPTOR _ACE_PEER_ACCEPTOR
+#   define ACE_PEER_ACCEPTOR_ADDR typename _ACE_PEER_ACCEPTOR::PEER_ADDR
+
+// Handle ACE_Connector
+#   define ACE_PEER_CONNECTOR_1 class _ACE_PEER_CONNECTOR
+#   define ACE_PEER_CONNECTOR_2 _ACE_PEER_CONNECTOR
+#   define ACE_PEER_CONNECTOR _ACE_PEER_CONNECTOR
+#   define ACE_PEER_CONNECTOR_ADDR typename ACE_PEER_CONNECTOR::PEER_ADDR
+#   define ACE_PEER_CONNECTOR_ADDR_ANY ACE_PEER_ADDR_TYPEDEF::sap_any
+
+// Handle ACE_SOCK_*
+#   define ACE_SOCK_ACCEPTOR ACE_SOCK_Acceptor
+#   define ACE_SOCK_CONNECTOR ACE_SOCK_Connector
+#   define ACE_SOCK_STREAM ACE_SOCK_Stream
+#   define ACE_SOCK_DGRAM ACE_SOCK_Dgram
+#   define ACE_SOCK_DGRAM_BCAST ACE_SOCK_Dgram_Bcast
+#   define ACE_SOCK_DGRAM_MCAST ACE_SOCK_Dgram_Mcast
+
 #endif

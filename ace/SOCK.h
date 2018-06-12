@@ -188,7 +188,8 @@ public:
 	 // total specified number of bytes is transfered without error, the 
 	 // method return value should equal the value of @c bytes_transferred.
 
-
+  // = Meta-type info
+  typedef ACE_INET_Addr PEER_ADDR;
 
 
 

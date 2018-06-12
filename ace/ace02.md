@@ -1,3 +1,12 @@
+1.
+
+![ace_acceptor01.png](./ace_acceptor01.png)
+
+An SVC_HANDLER class, which provides an interface for processing services defined by clients, servers, or both client and server roles in peer-to-peer services. This parameter is instantiated by a subclass of the ACE_Svc_Handler class described in Section 7.2.
+
+A PEER_ACCEPTOR class, which is able to accept client connections passively. This parameter is often specified as one of the ACE IPC wrapper facades, such as the ACE_SOCK_Acceptor described in Chapter 3 of C++NPv1.
+
+![ace_acceptor02.png](./ace_acceptor02.png)
 
 Aceptor.cpp:389
 ```cpp
