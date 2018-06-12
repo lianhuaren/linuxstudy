@@ -22,29 +22,29 @@ int ACE_SOCK_Acceptor::shared_open (const ACE_Addr &local_sap,
 		
 		if (local_inet_addr.sin_port == 0) {
 
-			ACE_UINT32 ip_addr =  ntohl (ACE_UINT32 (local_inet_addr.sin_addr.s_addr));
+			ACE_UINT32 ip_addr =  ::ntohl (ACE_UINT32 (local_inet_addr.sin_addr.s_addr));
 			
 			ACE_INET_Addr addr;
 			
 			addr = ACE_INET_Addr ((u_short)0, ip_addr);
 			
-			if (bind (this->get_handle (),
+			if (::bind (this->get_handle (),
 											(sockaddr*)addr.get_addr(),
 											addr.get_size()) == -1 ) 
 			error = 1;
 			
-		} else if (bind (this->get_handle (),
+		} else if (::bind (this->get_handle (),
 											reinterpret_cast<sockaddr *> (&local_inet_addr),
 											sizeof(local_inet_addr)) == -1 ) 
 			error = 1;
-	}  else if (bind (this->get_handle (),
+	}  else if (::bind (this->get_handle (),
                          (sockaddr *) local_sap.get_addr (),
                          local_sap.get_size ()) == -1) {
 			error = 1;
 	}
 	
 	if (error != 0
-		|| listen (this->get_handle (),
+		|| ::listen (this->get_handle (),
 									backlog) == -1)
 	{
       // ACE_Errno_Guard g (errno);    // Preserve across close() below.

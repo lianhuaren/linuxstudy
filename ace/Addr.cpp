@@ -122,7 +122,7 @@ int ACE_INET_Addr::set_address (const char *ip_addr,
       if (encode)
 	  {
         // ip4 = ACE_HTONL (ip4);
-		ip4 = htonl (ip4);
+		ip4 = ::htonl (ip4);
 	  }
 
       if (this->get_type () == AF_INET && map == 0) {
