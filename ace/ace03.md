@@ -14,6 +14,50 @@
 ```cpp
 
 int
+ACE_Dev_Poll_Reactor::handle_events_i (ACE_Time_Value *max_wait_time,
+                                       Token_Guard &guard)
+{
+  ACE_TRACE ("ACE_Dev_Poll_Reactor::handle_events_i");
+
+  int result = 0;
+
+  // Poll for events
+  //
+  // If the underlying event wait call was interrupted via the interrupt
+  // signal (i.e. returned -1 with errno == EINTR) then the loop will
+  // be restarted if so desired.
+  do
+    {
+      result = this->work_pending_i (max_wait_time);
+      if (result == -1 && (this->restart_ == 0 || errno != EINTR))
+        ACE_ERROR ((LM_ERROR, ACE_TEXT("%t: %p\n"), ACE_TEXT("work_pending_i")));
+    }
+  while (result == -1 && this->restart_ != 0 && errno == EINTR);
+
+  if (result == 0 || (result == -1 && errno == ETIME))
+    return 0;
+  else if (result == -1)
+    {
+      if (errno != EINTR)
+        return -1;
+
+      // Bail out -- we got here since the poll was interrupted.
+      // If it was due to a signal registered through our ACE_Sig_Handler,
+      // then it was dispatched, so we count it in the number of events
+      // handled rather than cause an error return.
+      if (ACE_Sig_Handler::sig_pending () != 0)
+        {
+          ACE_Sig_Handler::sig_pending (0);
+          return 1;
+        }
+      return -1;
+    }
+
+  // Dispatch an event.
+  return this->dispatch (guard);
+}
+
+int
 ACE_Dev_Poll_Reactor::work_pending_i (ACE_Time_Value * max_wait_time)
 {
   ACE_TRACE ("ACE_Dev_Poll_Reactor::work_pending_i");
