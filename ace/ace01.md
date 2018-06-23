@@ -1,3 +1,41 @@
+
+配置环境变量： 
+vi ~/.bashrc
+
+ACE_ROOT=~/Software/ACE_wrappers
+export ACE_ROOT
+LD_LIBARY_PATH=$ACE_ROOT/ace:$LD_LIBARY_PATH
+export LD_LIBARY_PATH
+
+source ~/.bashrc //生效环境变量
+
+[https://blog.csdn.net/hou512504317/article/details/70224691](https://blog.csdn.net/hou512504317/article/details/70224691)
+
+接着使用如下方法才编译成功ACE+epoll，方法如下：
+
+1、cd $ACE_ROOT/ace
+
+     vi config.h   --新建
+
+ 添加：#define ACE_HAS_STANDARD_CPP_LIBRARY 1
+
+         #define ACE_HAS_EVENT_POLL 1
+         #include "config-linux.h"
+
+2、cd $ACE_ROOT/include/makeinclude
+
+    vi platform_macros.GNU   --新建
+
+添加：include $(ACE_ROOT)/include/makeinclude/platform_linux.GNU
+
+3、cd $ACE_ROOT/ace
+
+     make -f GNUmakefile
+
+[https://www.cnblogs.com/huanghuang/archive/2012/09/25/2701103.html](https://www.cnblogs.com/huanghuang/archive/2012/09/25/2701103.html)
+
+g++ Server.cpp -g -L$ACE_ROOT/lib -lACE -lrt
+
 ubuntu安装ACE过程
 
 ../configure --disable-ssl
