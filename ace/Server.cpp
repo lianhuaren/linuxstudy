@@ -1,100 +1,145 @@
-#include "ace/Reactor.h"
-#include "ace/Svc_Handler.h"
-#include "ace/Acceptor.h"
-#include "ace/Synch.h"
+// $Id: HAStatus-AC.cpp 80826 2008-03-04 14:51:23Z wotte $
+
+#include "ace/OS_NS_errno.h"
+#include "ace/OS_NS_sys_time.h"
+#include "ace/os_include/os_netdb.h"
+#include "ClientService.h"
+
+// Listing 1 code/ch07
+#include "ace/Log_Msg.h"
+#include "ace/INET_Addr.h"
 #include "ace/SOCK_Acceptor.h"
-#include <iostream>
-using namespace std;
-class MyServiceHandler; //forward declaration
-typedef ACE_Singleton<ACE_Reactor,ACE_Null_Mutex> Reactor;
-typedef ACE_Acceptor<MyServiceHandler,ACE_SOCK_ACCEPTOR> Acceptor;
-class MyServiceHandler:
-	public ACE_Svc_Handler<ACE_SOCK_STREAM,ACE_MT_SYNCH>
+#include "ace/Reactor.h"
+#include "ace/Acceptor.h"
+#include "ace/Dev_Poll_Reactor.h"
+
+typedef ACE_Acceptor<ClientService, ACE_SOCK_ACCEPTOR>
+  ClientAcceptor;
+// Listing 1
+
+// Listing 4 code/ch07
+int
+ClientService::open (void *p)
 {
-	// The two thread names are kept here
-	ACE_thread_t thread_names[2];
-public:
-	MyServiceHandler()
-	{
-		printf("111");
-	}
-	int open(void*)
-	{
-		ACE_DEBUG((LM_DEBUG, "Acceptor: received new connection \n"));
-		//Register with the reactor to remember this handler..
-		Reactor::instance()
-			->register_handler(this,ACE_Event_Handler::READ_MASK);
-		ACE_DEBUG((LM_DEBUG,"Acceptor: ThreadID:(%t) open\n"));
-		//Create two new threads to create and send messages to the
-		//remote machine.
-		//activate(THR_NEW_LWP,
-		//	2, //2 new threads
-		//	0, //force active false, if already created don¡¯t try again.
-		//	ACE_DEFAULT_THREAD_PRIORITY,//Use default thread priority
-		//	-1,
-		//	this,//Which ACE_Task object to create? In this case this one.
-		//	0,// don¡¯t care about thread handles used
-		//	0,// don¡¯t care about where stacks are created
-		//	0,//don¡¯t care about stack sizes
-		//	thread_names); // keep identifiers in thread_names
-		//keep the service handler registered with the acceptor.
-		return 0;
+  if (super::open (p) == -1)
+    return -1;
 
-
-	}
-	void send_message1(void)
-	{
-		//Send message type 1
-		ACE_DEBUG((LM_DEBUG,"(%t)Sending message::>>"));
-		//Send the data to the remote peer
-		ACE_DEBUG((LM_DEBUG,"Sent message1"));
-		peer().send_n("Message1",strlen("Message1"));
-	} //end send_message1
-	int send_message2(void)
-	{
-		//Send message type 1
-		ACE_DEBUG((LM_DEBUG,"(%t)Sending message::>>"));
-		//Send the data to the remote peer
-		ACE_DEBUG((LM_DEBUG,"Sent Message2"));
-		peer().send_n("Message2",strlen("Message1"));
-		return 0;
-	}//end send_message_2
-	int svc(void)
-	{
-		ACE_DEBUG( (LM_DEBUG,"(%t) Svc thread \n"));
-		if(ACE_Thread::self()== thread_names[0])
-			while(1) ;//send_message1(); //send message 1s forever
-		else
-			while(1) ;//send_message2(); //send message 2s forever
-		return 0; // keep the compiler happy.
-	}
-	int handle_input(ACE_HANDLE)
-	{
-		ACE_DEBUG((LM_DEBUG,"(%t) handle_input ::"));
-		char* data= new char[13];
-		//Check if peer aborted the connection
-		if(peer().recv_n(data,12)==0)
-		{
-			printf("Peer probably aborted connection");
-			return -1; //de-register from the Reactor.
-		}
-
-		//Show what you got..
-		ACE_OS::printf("<< %s\n",data);
-		//keep yourself registered
-		return 0;
-	}
-};
-int main(int argc, char* argv[])
-{
-ACE_INET_Addr port_to_listen ("HAStatus");
-
-	ACE_INET_Addr addr(6000);
-	ACE_DEBUG((LM_DEBUG,"Thread: (%t) main"));
-	//Prepare to accept connections
-	Acceptor myacceptor(addr,Reactor::instance());
-	// wait for something to happen.
-	while(1)
-		Reactor::instance()->handle_events();
-	return 0;
+  ACE_TCHAR peer_name[MAXHOSTNAMELEN];
+  ACE_INET_Addr peer_addr;
+  if (this->peer ().get_remote_addr (peer_addr) == 0 &&
+      peer_addr.addr_to_string (peer_name, MAXHOSTNAMELEN) == 0)
+    ACE_DEBUG ((LM_DEBUG,
+                ACE_TEXT ("(%P|%t) Connection from %s\n"),
+                peer_name));
+  return 0;
 }
+// Listing 4
+
+// Listing 5 code/ch07
+int
+ClientService::handle_input (ACE_HANDLE)
+{
+  const size_t INPUT_SIZE = 4096;
+  char buffer[INPUT_SIZE];
+  ssize_t recv_cnt, send_cnt;
+
+  recv_cnt = this->peer ().recv (buffer, sizeof(buffer));
+  if (recv_cnt <= 0)
+    {
+      ACE_DEBUG ((LM_DEBUG,
+                  ACE_TEXT ("(%P|%t) Connection closed\n")));
+      return -1;
+    }
+
+  send_cnt =
+    this->peer ().send (buffer,
+                        static_cast<size_t> (recv_cnt));
+  if (send_cnt == recv_cnt)
+    return 0;
+  if (send_cnt == -1 && ACE_OS::last_error () != EWOULDBLOCK)
+    ACE_ERROR_RETURN ((LM_ERROR,
+                       ACE_TEXT ("(%P|%t) %p\n"),
+                       ACE_TEXT ("send")),
+                      0);
+  if (send_cnt == -1)
+    send_cnt = 0;
+  ACE_Message_Block *mb = 0;
+  size_t remaining =
+    static_cast<size_t> ((recv_cnt - send_cnt));
+  ACE_NEW_RETURN (mb, ACE_Message_Block (remaining), -1);
+  mb->copy (&buffer[send_cnt], remaining);
+  int output_off = this->msg_queue ()->is_empty ();
+  ACE_Time_Value nowait (ACE_OS::gettimeofday ());
+  if (this->putq (mb, &nowait) == -1)
+    {
+      ACE_ERROR ((LM_ERROR,
+                  ACE_TEXT ("(%P|%t) %p; discarding data\n"),
+                  ACE_TEXT ("enqueue failed")));
+      mb->release ();
+      return 0;
+    }
+  if (output_off)
+    return this->reactor ()->register_handler
+      (this, ACE_Event_Handler::WRITE_MASK);
+  return 0;
+}
+// Listing 5
+
+// Listing 6 code/ch07
+int
+ClientService::handle_output (ACE_HANDLE)
+{
+  ACE_Message_Block *mb = 0;
+  ACE_Time_Value nowait (ACE_OS::gettimeofday ());
+  while (-1 != this->getq (mb, &nowait))
+    {
+      ssize_t send_cnt =
+        this->peer ().send (mb->rd_ptr (), mb->length ());
+      if (send_cnt == -1)
+        ACE_ERROR ((LM_ERROR,
+                    ACE_TEXT ("(%P|%t) %p\n"),
+                    ACE_TEXT ("send")));
+      else
+        mb->rd_ptr (static_cast<size_t> (send_cnt));
+      if (mb->length () > 0)
+        {
+          this->ungetq (mb);
+          break;
+        }
+      mb->release ();
+    }
+  return (this->msg_queue ()->is_empty ()) ? -1 : 0;
+}
+// Listing 6
+
+// Listing 7 code/ch07
+int
+ClientService::handle_close (ACE_HANDLE h, ACE_Reactor_Mask mask)
+{
+  if (mask == ACE_Event_Handler::WRITE_MASK)
+    return 0;
+  return super::handle_close (h, mask);
+}
+// Listing 7
+
+// Listing 2 code/ch07
+int ACE_TMAIN (int, ACE_TCHAR *[])
+{
+ACE_Reactor::instance(new ACE_Reactor(new ACE_Dev_Poll_Reactor, 1), 1);
+
+  ACE_INET_Addr port_to_listen (6000);//("HAStatus");
+  ClientAcceptor acceptor;
+  if (acceptor.open (port_to_listen,
+                     ACE_Reactor::instance (),
+                     ACE_NONBLOCK) == -1)
+    return 1;
+
+  ACE_Reactor::instance ()->run_reactor_event_loop ();
+
+  return (0);
+}
+// Listing 2
+
+// Listing 8 code/ch07
+// Listing 8
+
